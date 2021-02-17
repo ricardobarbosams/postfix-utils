@@ -39,7 +39,7 @@ EOF
 delay_template = <<EOF
 Charset: us-ascii
 From: MAILER-DAEMON (Sistema de entrega de e-mail)
-Subject: E-mail atrasado na entrega (Ainda tentando novamente)
+Subject: E-mail atrasado na entrega (Ainda tentando entregar)
 Postmaster-Subject: Postmaster Warning: E-mail atrasado na entrega
 
 Este é o sistema de e-mail do sistema $myhostname.
@@ -55,6 +55,46 @@ Para obter suporte, envie um e-mail para <postmaster>
 
 Se voce fizer isso, por favor inclua este relatório do problema. Você pode
 excluir seu próprio texto da mensagem retornada em anexo.
+
+                   Administrador do sistema de e-mail
+EOF
+
+#
+# O modelo de sucesso é usado quando o e-mail é entregue na caixa de e-mail,
+# quando um alias ou lista é expandida, ou quando o e-mail é entregue a um
+# sistema que não anuncia suporte DSN. É um erro para especificar
+# a "Postmaster-Subject:".
+# 
+
+success_template = <<EOF
+Charset: us-ascii
+From: MAILER-DAEMON (Sistema de entrega de e-mail)
+Subject: Relatório de entrega de e-mail com sucesso
+
+Este é o sistema de e-mail do sistema $myhostname.
+
+Sua mensagem listada foi entregue ao destino com sucesso
+Se a mensagem foi entregue na caixa de e-mail, você
+não receba mais notificações. Caso contrário, você ainda pode receber
+notificações de erros de entrega de correio de outros sistemas. 
+
+                   Administrador do sistema de e-mail
+EOF
+
+#
+# O modelo de verificação é usado para verificação de endereço (comando: sendmail -bv
+# endereço...). ou para entrega detalhada de e-mail (comando: sendmail -v address ...).
+# É um erro especificar um "Postmaster-Subject:" aqui.
+# 
+
+verify_template = <<EOF
+Charset: us-ascii
+From: MAILER-DAEMON (Sistema de entrega de e-mail)
+Subject: Relatório de status de entrega do e-mail
+
+Este é o sistema de e-mail do sistema $myhostname.
+
+Em anexo está o relatório de entrega de correio que você solicitou.
 
                    Administrador do sistema de e-mail
 EOF
