@@ -1,0 +1,60 @@
+#
+# O modelo de falha é utilizado quando o e-mail é retornado para o remetente;
+# O destino rejeitou a mensagem ou o MTA
+# não pode ser alcançado antes da mensagem expirar na fila
+#
+
+failure_template = <<EOF
+Charset: us-ascii
+From: MAILER-DAEMON (Sistema de entrega de e-mail)
+Subject: E-mail nao entregue devolvendo e-mail para o remetente
+Postmaster-Subject: Postmaster Copy: E-Mail nao entregue
+
+Este é o sistema de e-mail do sistema $myhostname.
+
+Lamento informar que sua mensagem não foi entregue para um ou mais destinatários. Motivo: anexado abaixo.
+
+Para obter suporte, envie um e-mail para <postmaster>
+
+Se voce fizer isso, por favor inclua este relatório do problema. Você pode
+excluir seu próprio texto da mensagem retornada em anexo.
+
+                   Administrador do sistema de e-mail
+EOF
+
+
+#
+# O modelo de atraso é usado quando o e-mail está atrasado. Observe uma dica interessante:
+# o modelo padrão exibe o valor delay_warning_time em horas
+# anexando o sufixo _hours ao nome do parâmetro; 
+# mostra o valor maximal_queue_lifetime como dias, acrescentando o sufixo _days
+#
+# Outros sufixos são: _seconds, _minutes, _weeks. Não existem nenhum outros
+# parâmetros no arquivo main.cf que possuem este comportamento especial.
+#
+# Você precisa ajustar esses sufixos (e o texto ao redor) se
+# você tem configurações muito diferentes para esses parâmetros de tempo.
+# 
+
+delay_template = <<EOF
+Charset: us-ascii
+From: MAILER-DAEMON (Sistema de entrega de e-mail)
+Subject: E-mail atrasado na entrega (Ainda tentando novamente)
+Postmaster-Subject: Postmaster Warning: E-mail atrasado na entrega
+
+Este é o sistema de e-mail do sistema $myhostname.
+
+######################################################################
+# ISTO É APENAS UM AVISO.  VOCÊ NÃO NECESSITA REENVIAR SUA MENSAGEM. #
+######################################################################
+
+Sua mensagem não pôde ser entregue por mais de $delay_warning_time_hours hour(s).
+Será tentado novamente até que seja $maximal_queue_lifetime_days dia(s).
+
+Para obter suporte, envie um e-mail para <postmaster>
+
+Se voce fizer isso, por favor inclua este relatório do problema. Você pode
+excluir seu próprio texto da mensagem retornada em anexo.
+
+                   Administrador do sistema de e-mail
+EOF
