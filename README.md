@@ -1,5 +1,9 @@
 # postfix-utils
 
+## Introdução
+
+Este repositório criei para colocar dicas para uso do MTA postfix.
+
 ## Tradução do arquivo bounce.cf para o português brasil
 
 O comando para verificar se o arquivo `bounce.cf` está correto está abaixo:
