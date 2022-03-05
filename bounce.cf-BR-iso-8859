@@ -1,0 +1,101 @@
+#
+# O modelo de falha e utilizado quando o e-mail e retornado para o remetente;
+# O destino rejeitou a mensagem ou o MTA
+# nao pode ser alcancado antes da mensagem expirar na fila
+#
+
+failure_template = <<EOF
+Charset: utf-8
+From: MAILER-DAEMON (Mail Delivery System)
+Subject: =?iso-8859-1?q?Mensagem=20n=E3o=20entregue=20devolvendo=20ao=20remetente?=
+Postmaster-Subject: Postmaster Copy: Mensagem nao entregue
+
+Este é o sistema de e-mail do sistema $myhostname.
+
+Houve um erro, anexado abaixo, na entrega do seu e-mail para um ou mais destinatários.
+
+Para obter ajuda, envie um e-mail para postmaster@dominio.com.
+
+Se fizer isso, por favor inclua o erro abaixo.
+Você pode excluir seu próprio texto da mensagem anexa abaixo.
+
+                   O sistema de e-mails
+EOF
+
+#
+# O modelo de atraso e usado quando o e-mail esta atrasado. Observe uma dica interessante:
+# o modelo padrao exibe o valor delay_warning_time em horas
+# anexando o sufixo _hours ao nome do parametro; 
+# mostra o valor maximal_queue_lifetime como dias, acrescentando o sufixo _days
+#
+# Outros sufixos sao: _seconds, _minutes, _weeks. Nao existem nenhum outros
+# parametros no arquivo main.cf que possuem este comportamento especial.
+#
+# Voce precisa ajustar esses sufixos (e o texto ao redor) se
+# voce tem configuracoes muito diferentes para esses parametros de tempo.
+# 
+
+delay_template = <<EOF
+Charset: utf-8
+From: MAILER-DAEMON (Sistema de entrega de e-mail)
+Subject: E-mail atrasado na entrega (Ainda tentando entregar)
+Postmaster-Subject: Postmaster Warning: E-mail atrasado na entrega
+
+Este é o sistema de e-mail do sistema $myhostname.
+
+######################################################################
+# ISTO É APENAS UM AVISO.  VOCÊ NÂO NECESSITA REENVIAR SUA MENSAGEM. #
+######################################################################
+
+Sua mensagem não pode ser entregue por mais de $delay_warning_time_hours hora(s).
+Serão feitas novas tentativas num período máximo de $maximal_queue_lifetime_days dia(s).
+
+Para obter suporte, envie um e-mail para postmaster@dominio.com.
+
+Se voce fizer isso, por favor inclua o erro abaixo.
+Você pode excluir seu próprio texto da mensagem anexa abaixo.
+
+                   Administrador do sistema de e-mail
+EOF
+
+#
+# O modelo de sucesso e usado quando o e-mail e entregue na caixa de e-mail,
+# quando um alias ou lista e expandida, ou quando o e-mail e entregue a um
+# sistema que nao anuncia suporte DSN. E um erro para especificar
+# a "Postmaster-Subject:".
+# 
+
+success_template = <<EOF
+Charset: utf-8
+From: MAILER-DAEMON (Sistema de entrega de e-mail)
+Subject: =?iso-8859-1?q?Relat=F3rio=20de=20entrega=20de=20e-mail=20com=20sucesso?=
+
+Este é o sistema de e-mail do sistema $myhostname.
+
+Sua mensagem foi entregue com sucesso para o(s) destinatário(s) listado(s)
+abaixo. Se a mensagem foi entregue na caixa de e-mail, você
+não receberá mais notificações. Caso contrário, você ainda poderá receber
+notificações de outros sistemas de e-mail à respeito de falhas durante a
+entrega local da mensagem.
+
+                   Administrador do sistema de e-mail
+EOF
+
+#
+# O modelo de verificacao e usado para verificacao de endereco (comando: sendmail -bv
+# endereco...). ou para entrega detalhada de e-mail (comando: sendmail -v address ...).
+# E um erro especificar um "Postmaster-Subject:" aqui.
+# 
+
+verify_template = <<EOF
+Charset: utf-8
+From: MAILER-DAEMON (Sistema de entrega de e-mail)
+Subject: =?iso-8859-1?q?Relat=F3rio=20de=20status=20de=20entrega=20do=20e-mail?=
+
+Este é o sistema de e-mail do sistema $myhostname.
+
+Segue o relatório de entrega de e-mail solicitado.
+
+                   Administrador do sistema de e-mail
+EOF
+
